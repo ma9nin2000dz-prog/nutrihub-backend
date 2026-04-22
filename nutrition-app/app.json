@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "My NutriHub",
+    "slug": "my-nutrihub",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/new.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.oussamaamma.nutritionapp",
+      "permissions": ["ACTIVITY_RECOGNITION"]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e907ae6b-20da-4a66-ad42-ad73a822d0ed"
+      }
+    }
+  }
+}
