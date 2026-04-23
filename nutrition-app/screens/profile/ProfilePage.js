@@ -172,11 +172,11 @@ const progress = Math.min(safePercent, 1);
         <Text style={{
   color:"white",
   fontWeight:"bold",
-  fontSize:14
+  fontSize: label === "Calories" ? 23 : 14
 }}>
           {Math.round(safePercent * 100)}%
         </Text>
-        <Text style={{ color:"#9ca3af", fontSize:10 }}>
+        <Text style={{ color:"#9ca3af", fontSize: label === "Calories" ? 14 : 10}}>
           {Math.round(value)}{unit}
         </Text>
 
@@ -1316,9 +1316,9 @@ style={[
     marginTop: 30,  
     marginBottom: 10 
   }}
-  onLayout={(e) => {
+  /*onLayout={(e) => {
     setChartWidth(e.nativeEvent.layout.width);
-  }}
+  }}*/
 >
 
 <Text style={{
@@ -1352,7 +1352,8 @@ Calories Trend (last 7 days)
 
       datasets: [{ data: caloriesData }]
     }}
-    width={chartWidth-10 }
+   // width={chartWidth-10 }
+     width={Math.min(width - 50, 900)}
     height={180}
     chartConfig={{
       backgroundColor:"#111827",
@@ -1584,7 +1585,7 @@ Meals of {new Date(selectedDay.date).toLocaleDateString()}
     <View>
       {/* 🔥 circles */}
      <>
-  {/* 🔥 Calories فوق */}
+  {/* 🔥 Calories فوق 
   <View style={{alignItems:"center", marginBottom:25}}>
   <View style={[styles.circleCard, {paddingVertical:20, width:"60%"}]}>
     <SmallMacroCircle
@@ -1597,7 +1598,7 @@ Meals of {new Date(selectedDay.date).toLocaleDateString()}
   </View>
 </View>
 
-  {/* 🔥 3 macros في سطر واحد */}
+ 
   <View style={{
     flexDirection:"row",
     justifyContent:"space-between",
@@ -1605,7 +1606,7 @@ Meals of {new Date(selectedDay.date).toLocaleDateString()}
     width:"100%"
   }}>
 
-    {/* Protein */}
+    
     <View style={{flex:1, alignItems:"center"}}>
       <View style={styles.circleCard}>
         <SmallMacroCircle
@@ -1618,7 +1619,7 @@ Meals of {new Date(selectedDay.date).toLocaleDateString()}
       </View>
     </View>
 
-    {/* Carbs */}
+  
     <View style={{flex:1, alignItems:"center"}}>
       <View style={styles.circleCard}>
         <SmallMacroCircle
@@ -1631,7 +1632,7 @@ Meals of {new Date(selectedDay.date).toLocaleDateString()}
       </View>
     </View>
 
-    {/* Fat */}
+  
     <View style={{flex:1, alignItems:"center"}}>
       <View style={styles.circleCard}>
         <SmallMacroCircle
@@ -1644,7 +1645,70 @@ Meals of {new Date(selectedDay.date).toLocaleDateString()}
       </View>
     </View>
 
+  </View>*/}
+
+
+{/* CALORIES BIG CARD */}
+<View style={{ alignItems:"center", marginBottom:25 }}>
+  <View style={[styles.macroMainCard,{borderColor:"rgba(239,68,68,0.35)"}]}>
+    <SmallMacroCircle
+      label="Calories"
+      value={macros.calories}
+      total={getGoalCalories()}
+      color="#ef4444"
+      unit=""
+    />
   </View>
+</View>
+
+{/* 3 MINI CARDS */}
+<View style={styles.macroMiniRow}>
+
+  <View style={[
+    styles.macroMiniCard,
+    {borderColor:"rgba(59,130,246,0.35)"}
+  ]}>
+    <SmallMacroCircle
+      label="Protein"
+      value={macros.protein}
+      total={totalMacros}
+      color="#3b82f6"
+      unit="g"
+    />
+  </View>
+
+  <View style={[
+    styles.macroMiniCard,
+    {borderColor:"rgba(34,197,94,0.35)"}
+  ]}>
+    <SmallMacroCircle
+      label="Carbs"
+      value={macros.carbs}
+      total={totalMacros}
+      color="#22c55e"
+      unit="g"
+    />
+  </View>
+
+  <View style={[
+    styles.macroMiniCard,
+    {borderColor:"rgba(245,158,11,0.35)"}
+  ]}>
+    <SmallMacroCircle
+      label="Fat"
+      value={macros.fat}
+      total={totalMacros}
+      color="#f59e0b"
+      unit="g"
+    />
+  </View>
+
+</View>
+
+
+
+
+
 </>
 
       {/* 💰 price */}
@@ -1681,9 +1745,17 @@ Meals of {new Date(selectedDay.date).toLocaleDateString()}
       />
 
       <View>
-        <Text style={{color:"white",fontWeight:"bold"}}>
-          {r?.name} ({servings} servings)
-        </Text>
+        <Text style={{color:"white", fontWeight:"bold"}}>
+  {r?.name}
+</Text>
+
+<Text style={{
+  color:"#94a3b8",
+  fontSize:12,
+  marginTop:2
+}}>
+  {servings} servings
+</Text>
 
         <Text style={{color:"#9ca3af"}}>
           {Math.round(
@@ -2202,6 +2274,7 @@ circlesContainer:{
 
 
 circleCard:{
+  
   paddingVertical:10,
   borderRadius:20,
   alignItems:"center",
@@ -2625,5 +2698,46 @@ expertAvatarText: {
   color: "white",
   fontSize: 18,
   fontWeight: "bold"
+},
+
+
+
+macroMainCard:{
+  width:230,
+  paddingVertical:18,
+  borderRadius:28,
+  alignItems:"center",
+
+  backgroundColor:"#182334",
+  borderWidth:1.5,
+
+
+  
+  shadowColor:"#ef4444",
+  shadowOpacity:0.18,
+  shadowRadius:18,
+  elevation:8
+},
+
+macroMiniRow:{
+  flexDirection:"row",
+  justifyContent:"space-between",
+  gap:12,
+  marginBottom:15
+},
+
+macroMiniCard:{
+  flex:1,
+  paddingVertical:14,
+  borderRadius:22,
+  alignItems:"center",
+
+  backgroundColor:"#182334",
+  borderWidth:1.2,
+
+  shadowColor:"#000",
+  shadowOpacity:0.18,
+  shadowRadius:10,
+  elevation:6
 },
 });

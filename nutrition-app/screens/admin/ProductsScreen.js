@@ -1031,7 +1031,7 @@ badge: {
 },
 
 badgeText: {
-  fontSize: 14,
+  fontSize: 12,
   fontWeight: "500",
   color: "#111827"
 },
@@ -1045,7 +1045,7 @@ marginBottom: 15,
   backgroundColor: "#fff",
   padding: 10,
   borderRadius: 20,
-minHeight: 160, 
+minHeight: 110, 
   shadowColor: "#000",
   shadowOpacity: 0.1,
   shadowRadius: 10,
@@ -1057,7 +1057,7 @@ cardContent: {
 },
 
 newTitle: {
-  fontSize: 18,
+  fontSize: 17,
   fontWeight: "700",
   color: "#0F172A",
   marginBottom: 8

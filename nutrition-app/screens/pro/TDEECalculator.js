@@ -568,7 +568,7 @@ showsVerticalScrollIndicator={false}
   {/* AGE */}
   <StepInput
     label="Age"
-    value={age}
+    value={age ?? 0}
     setValue={setAge}
 
   />
