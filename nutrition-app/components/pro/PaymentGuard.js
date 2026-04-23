@@ -41,44 +41,7 @@ const getPrice = (name) => {
   return plans.find(p => p.name === name)?.price || 0;
 };
 
-  /*useEffect(() => {
-  if (!user) return;
-
-  const planDate = user.planEndDate?.$date || user.planEndDate;
-
-  const isExpired = planDate
-    ? new Date(planDate) < new Date()
-    : false;
-
-  const paymentRequired =
-    user.paymentRequired === true ||
-    user.paymentRequired === "true";
-
-  setShow(isExpired || paymentRequired);
-
-}, [user]);*/
-/*useEffect(() => {
-  if (!user) return;
-
- // const planDate = user.planEndDate?.$date || user.planEndDate;
-const planDate = "2020-01-01"; // 🔥 expired test
-  const isExpired = planDate
-    ? new Date(planDate) < new Date()
-    : false;
-
-  const paymentRequired =
-    user.paymentRequired === true ||
-    user.paymentRequired === "true";
-
-  // ✅ تحقق من نوع الخطة
-  const isFreePlan =
-    user.plan === "Free" || user.planName === "Free";
-
-  // 🔥 الشرط النهائي
-  setShow(!isFreePlan && (isExpired || paymentRequired));
-
-}, [user]);*/
-
+  
 
 useEffect(() => {
   if (!user) return;
@@ -101,10 +64,10 @@ useEffect(() => {
     setShow(false);
 
   } else if (paymentRequired) {
-    setShow("payment");   // 💳 لازم يدفع
+    setShow("payment");   // 
 
   } else if (isExpired) {
-    setShow("waiting");   // ⏳ راهو دافع و يستنى
+    setShow("waiting");   
 
   } else {
     setShow(false);
@@ -115,6 +78,14 @@ useEffect(() => {
 
 useEffect(() => {
   if (!user) return;
+
+  const planType = (user?.plan || "").toLowerCase();
+
+  if (planType === "free") {
+    setShow(false);
+    return;
+  }
+
 
   const planDate = user.planEndDate?.$date || user.planEndDate;
 

@@ -123,7 +123,8 @@ let userData = {
   password,
   role: selectedRole,
   plan: selectedPlan,
-  
+   paymentRequired:
+    selectedPlan === "Free" ? false : true
 };
 
 let code = null;

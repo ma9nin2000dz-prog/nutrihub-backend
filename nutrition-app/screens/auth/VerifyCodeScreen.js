@@ -99,7 +99,12 @@ await fetch(BASE_URL + "payment-proof", {
   const { logout } = useContext(AuthContext);
 const from = route?.params?.from;
   const email = route?.params?.email;
-  const planName = route?.params?.plan || "Pro";
+ // const planName = route?.params?.plan || "Pro";
+ const planName =
+  route?.params?.plan ||
+  route?.params?.user?.plan ||
+  "Free";
+
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
 
@@ -111,11 +116,29 @@ console.log("SHOW MODAL:", showPaymentModal);
     setShowPaymentModal(true);
   }
 }, []);*/
-useEffect(() => {
+/*useEffect(() => {
   if (from === "expired_plan" || from === "payment_required") {
     setShowPaymentModal(true);
   }
-}, [from]);
+}, [from]);*/
+useEffect(() => {
+
+  const planType = (planName || "").toLowerCase();
+
+  // 🔥 Free never shows payment modal
+  if (planType === "free") {
+    setShowPaymentModal(false);
+    return;
+  }
+
+  if (
+    from === "expired_plan" ||
+    from === "payment_required"
+  ) {
+    setShowPaymentModal(true);
+  }
+
+}, [from, planName]);
 //////////////////////////////
 
   const handleVerify = async () => {
@@ -135,14 +158,34 @@ useEffect(() => {
      
    
 
-//setShowPaymentModal(true);
+
 
 if (from === "profile") {
   // ✔ يرجع مباشرة بدون مودال
   navigation.goBack();
-} else {
-  // ✔ فقط في signup يظهر المودال
+} /*else {
+  
   setShowPaymentModal(true);
+}*/
+else {
+
+  const planType = (planName || "").toLowerCase();
+
+  if (planType === "free") {
+
+    // 🔥 Free يكمل مباشرة
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }]
+    });
+
+  } else {
+
+    // 💳 الخطط المدفوعة فقط
+    setShowPaymentModal(true);
+
+  }
+
 }
 
 
@@ -206,7 +249,7 @@ const handleCancel = async () => {
     <View style={styles.card}>
 
       {/* TITLE */}
-      <Text style={styles.title}>Complete Payment</Text>
+      <Text style={styles.title}>COMPLETE PAYMENT</Text>
       <Text style={styles.subtitle}>
         Activate your account by completing the payment
       </Text>

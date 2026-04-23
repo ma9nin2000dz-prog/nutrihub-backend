@@ -29,7 +29,7 @@ const [successMessage, setSuccessMessage] = useState("");
 
  const [isAvailable, setIsAvailable] = useState(null);
 const [checking, setChecking] = useState(false);
-
+const [confirmPassword, setConfirmPassword] = useState("");
 const checkUsername = async (value) => {
   try {
     setChecking(true);
@@ -79,6 +79,15 @@ if (isAvailable === false) {
   return;
 }
 
+if (password !== confirmPassword) {
+  setErrorMessage("Passwords do not match ❌");
+  return;
+}
+if (password.length < 6) {
+ setErrorMessage("Password must be at least 6 characters");
+ return;
+}
+
    
 const res = await apiRequest("register", "POST", {
   name,
@@ -99,7 +108,8 @@ if (status === "not_verified") {
 navigation.navigate("VerifyCode", {
   email,
   from: "signup",
-  plan: selectedPlan // 🔥 هذا هو الحل
+  //plan: selectedPlan 
+  plan: res.plan
 });
 
 } else if (status === "pending") {
@@ -199,7 +209,30 @@ navigation.navigate("VerifyCode", {
                 styles.input,
                 errorMessage && styles.inputError
               ]}
+               color="#0f172a"
+  cursorColor="#0f172a"
+  selectionColor="#0f172a"
             />
+
+
+
+                <TextInput
+  placeholder="Confirm Password"
+  placeholderTextColor="#9CA3AF"
+  secureTextEntry
+  value={confirmPassword}
+  onChangeText={setConfirmPassword}
+  style={[
+    styles.input,
+    errorMessage && styles.inputError
+  ]}
+  color="#0f172a"
+  cursorColor="#0f172a"
+  selectionColor="#0f172a"
+/>
+
+
+
 
 {successMessage ? (
   <Text style={styles.successText}>{successMessage}</Text>
