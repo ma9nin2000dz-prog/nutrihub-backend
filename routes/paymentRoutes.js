@@ -37,7 +37,7 @@ router.post("/payment-proof", upload.single("file"), async (req, res) => {
     });
 
     // 📤 send mail
-    await transporter.sendMail({
+    /*await transporter.sendMail({
       to: process.env.EMAIL_USER,
       subject: "New Payment Proof",
       text: `RIP: ${rip}\nCCP: ${ccp}`,
@@ -51,7 +51,44 @@ router.post("/payment-proof", upload.single("file"), async (req, res) => {
 
 
  // 🔥 GET USER
+const user = await User.findOne({ email });*/
+
+
+
+
+
 const user = await User.findOne({ email });
+
+if (!user) {
+  return res.status(404).json({ message: "User not found" });
+}
+
+await transporter.sendMail({
+  to: process.env.EMAIL_USER,
+
+  subject: `Payment Proof - ${user.name} - ${user.email} - ${user.plan}`,
+
+  text: `
+User Name: ${user.name}
+User Email: ${user.email}
+Plan: ${user.plan}
+RIP: ${rip}
+CCP: ${ccp}
+
+Payment proof attached.
+`,
+
+  attachments: [
+    {
+      filename: `payment-${user.email}.pdf`,
+      path: file.path
+    }
+  ]
+});
+
+
+
+
 
 if (!user) {
   return res.status(404).json({ message: "User not found" });

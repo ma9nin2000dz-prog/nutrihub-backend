@@ -16,17 +16,17 @@ const getBaseUrl = () => {
 
     if (hostUri) {
       const ip = hostUri.split(":")[0];
-     //return `http://${ip}:5000/api/`;
-   return "https://nutrihub-backend.onrender.com/api/";
+     return `http://${ip}:5000/api/`;
+   //return "https://nutrihub-backend.onrender.com/api/";
     }
 
-  // return "http://192.168.8.101:5000/api/";
-   return "https://nutrihub-backend.onrender.com/api/";
+   return "http://192.168.8.101:5000/api/";
+   //return "https://nutrihub-backend.onrender.com/api/";
    
   } catch (err) {
     console.log("BASE URL ERROR:", err);
- //return "http://192.168.8.101:5000/api/";
-return "https://nutrihub-backend.onrender.com/api/";
+ return "http://192.168.8.101:5000/api/";
+//return "https://nutrihub-backend.onrender.com/api/";
   
   }
 };

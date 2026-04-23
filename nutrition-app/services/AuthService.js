@@ -9,8 +9,8 @@
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-//const API_URL = "http://192.168.8.101:5000/api"; // ضع IP جهازك
-const API_URL = "https://nutrihub-backend.onrender.com/api";
+const API_URL = "http://192.168.8.101:5000/api"; // ضع IP جهازك
+//const API_URL = "https://nutrihub-backend.onrender.com/api";
 
 const AuthService = {
 
