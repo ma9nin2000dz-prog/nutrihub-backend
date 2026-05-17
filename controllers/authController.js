@@ -175,7 +175,7 @@ if (isVerificationOn) {
 /////////////////////////////////////////////////////////
     // 🚀 BREVO SMTP CONFIGURATION WITH AUTO-DELETE ON FAILURE
     /////////////////////////////////////////////////////////
-    const transporter = nodemailer.createTransport({
+    /*const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT) || 465,
       //secure: false, 
@@ -187,7 +187,21 @@ if (isVerificationOn) {
       tls: {
         rejectUnauthorized: false 
       }
-    });
+    });*/
+
+
+    const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false // يمنع فشل الاتصال بسبب شهادات الـ SSL
+  }
+});
 
     if (isVerificationOn) {
       try {
