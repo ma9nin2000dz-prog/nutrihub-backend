@@ -190,7 +190,7 @@ if (isVerificationOn) {
     });*/
 
 
-    const transporter = nodemailer.createTransport({
+    /*const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: 587,
   secure: false,
@@ -200,6 +200,21 @@ if (isVerificationOn) {
   },
   tls: {
     rejectUnauthorized: false // يمنع فشل الاتصال بسبب شهادات الـ SSL
+  }
+});*/
+/////////////////////////////////////////////////////////
+// 🚀 BREVO SMTP CONFIGURATION - FIXED FOR RENDER
+/////////////////////////////////////////////////////////
+const transporter = nodemailer.createTransport({
+  host: "smtp-relay.brevo.com", // كتابة المضيف مباشرة لضمان عدم الخطأ
+  port: 587,                   // القيمة الرقمية مباشرة لتجنب حظر Render
+  secure: false,               // false ضرورية للمنفذ 587
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false  // تجاوز مشاكل الشهادات الأمنية
   }
 });
 
