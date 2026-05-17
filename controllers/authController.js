@@ -206,15 +206,15 @@ if (isVerificationOn) {
 // 🚀 BREVO SMTP CONFIGURATION - FIXED FOR RENDER
 /////////////////////////////////////////////////////////
 const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com", // كتابة المضيف مباشرة لضمان عدم الخطأ
-  port: 587,                   // القيمة الرقمية مباشرة لتجنب حظر Render
-  secure: false,               // false ضرورية للمنفذ 587
+  host: "smtp-relay.brevo.com",
+  port: 2525,       // المنفذ البديل
+  secure: false,     // يجب أن تكون false مع 2525
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
   tls: {
-    rejectUnauthorized: false  // تجاوز مشاكل الشهادات الأمنية
+    rejectUnauthorized: false 
   }
 });
 
