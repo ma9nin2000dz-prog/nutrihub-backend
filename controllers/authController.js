@@ -221,7 +221,8 @@ const transporter = nodemailer.createTransport({
     if (isVerificationOn) {
       try {
         await transporter.sendMail({
-          from: `"NutriHub" <${process.env.SMTP_USER}>`,
+          //from: `"NutriHub" <${process.env.SMTP_USER}>`,
+          from: '"NutriHub" <makninoh@gmail.com>',
           to: email,
           subject: "Verification Code",
           text: `Your verification code is: ${code}`,
