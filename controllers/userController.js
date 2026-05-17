@@ -519,7 +519,7 @@ if (email && email !== user.email) {
     await user.save();
 
     // 📩 send email
-    const transporter = require("nodemailer").createTransport({
+    /*const transporter = require("nodemailer").createTransport({
       service: "gmail",
       auth: {
         user: process.env.EMAIL_USER,
@@ -531,7 +531,28 @@ if (email && email !== user.email) {
       to: email,
       subject: "Verify your new email",
       text: `Your verification code is: ${code}`,
-    });
+    });*/
+
+
+    // 📩 send email via Brevo
+const transporter = require("nodemailer").createTransport({
+  host: "smtp-relay.brevo.com",
+  port: 2525,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+  tls: { rejectUnauthorized: false }
+});
+
+await transporter.sendMail({
+  from: '"NutriHub Support" <makninoh@gmail.com>', // مرسل مفعّل
+  to: email,
+  subject: "Verify your new email",
+  text: `Your verification code for the new email is: ${code}`,
+});
+
 
     return res.json({
       type: "email_change_requested",
