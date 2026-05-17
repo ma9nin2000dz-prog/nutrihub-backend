@@ -28,13 +28,25 @@ router.post("/payment-proof", upload.single("file"), async (req, res) => {
     }
 
     // 📧 transporter
-    const transporter = nodemailer.createTransport({
+    /*const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
-    });
+    });*/
+
+
+    const transporter = nodemailer.createTransport({
+  host: "smtp-relay.brevo.com",
+  port: 2525,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER, // ab92df001@smtp-brevo.com من Render
+    pass: process.env.SMTP_PASS, // API Key من Render
+  },
+  tls: { rejectUnauthorized: false }
+});
 
     // 📤 send mail
     /*await transporter.sendMail({
@@ -63,7 +75,7 @@ if (!user) {
   return res.status(404).json({ message: "User not found" });
 }
 
-await transporter.sendMail({
+/*await transporter.sendMail({
   to: process.env.EMAIL_USER,
 
   subject: `Payment Proof - ${user.name} - ${user.email} - ${user.plan}`,
@@ -77,6 +89,32 @@ CCP: ${ccp}
 
 Payment proof attached.
 `,
+
+  attachments: [
+    {
+      filename: `payment-${user.email}.pdf`,
+      path: file.path
+    }
+  ]
+});*/
+
+await transporter.sendMail({
+  // 1. استخدم الإيميل المفعّل في Brevo كمرسل
+  from: '"NutriHub Admin" <makninoh@gmail.com>', 
+  
+  // 2. أرسل الإثبات لنفسك (للإدارة) لتتمكن من مراجعته
+  to: "makninoh@gmail.com", 
+
+  subject: `Payment Proof - ${user.name} - ${user.plan}`,
+
+  text: `
+    User Name: ${user.name}
+    User Email: ${user.email}
+    Plan: ${user.plan}
+    RIP: ${rip}
+    CCP: ${ccp}
+    Payment proof attached.
+  `,
 
   attachments: [
     {
