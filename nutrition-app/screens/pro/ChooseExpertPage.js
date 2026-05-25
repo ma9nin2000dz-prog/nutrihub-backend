@@ -40,22 +40,22 @@ export default function ChooseExpertPage({
       Linking.openURL(`mailto:${email}`);
     }
   };
-///////////////////////////////////
-const openWhatsApp = (phone) => {
-  if (!phone) {
-    alert("No phone number 📵");
-    return;
-  }
 
-  const cleaned = phone.replace(/\D/g, "");
-  const url = `https://wa.me/${cleaned}`;
+  const openWhatsApp = (phone) => {
+    if (!phone) {
+      alert("No phone number 📵");
+      return;
+    }
 
-  Linking.openURL(url).catch(() => {
-    alert("WhatsApp not available");
-  });
-};
+    const cleaned = phone.replace(/\D/g, "");
+    const url = `https://wa.me/${cleaned}`;
+
+    Linking.openURL(url).catch(() => {
+      alert("WhatsApp not available");
+    });
+  };
+
   return (
-
     <View style={{ flex: 1 }}>
 
       {/* SCROLL */}
@@ -63,113 +63,120 @@ const openWhatsApp = (phone) => {
         style={styles.container}
         contentContainerStyle={{ paddingBottom: 100 }}
       >
-      <View style={{ marginTop: 20 }}> 
-        <Text style={styles.header}>Staff Availability</Text>
+        <View style={{ marginTop: 20 }}> 
+          <Text style={styles.header}>Staff Availability</Text>
 
-        <TextInput
-          placeholder="Search expert..."
-          placeholderTextColor="#64748b"
-          value={expertSearch}
-          onChangeText={setExpertSearch}
-          style={styles.input}
-        />
+          <TextInput
+            placeholder="Search expert..."
+            placeholderTextColor="#64748b"
+            value={expertSearch}
+            onChangeText={setExpertSearch}
+            style={styles.input}
+          />
 
-        {filteredExperts.map(exp => {
-          const isSelected = exp._id === selectedExpertId;
-          const isAvailable = (exp.patients?.length || 0) < 15;
+          {filteredExperts.map(exp => {
+            const isSelected = exp._id === selectedExpertId;
+            const isAvailable = (exp.patients?.length || 0) < 15;
 
-         const isDefault = exp.photo === "/uploads/default-avatar.png";
+            const isDefault = exp.photo === "/uploads/default-avatar.png";
 
-const imageUri =
-  exp.photo && !isDefault
-    ? (exp.photo.startsWith("http")
-        ? exp.photo
-        : getImageUrl(exp.photo))
-    : null;
+            const imageUri =
+              exp.photo && !isDefault
+                ? (exp.photo.startsWith("http")
+                    ? exp.photo
+                    : getImageUrl(exp.photo))
+                : null;
 
-const firstLetter = exp.name
-  ? exp.name.charAt(0).toUpperCase()
-  : "?";
+            const firstLetter = exp.name
+              ? exp.name.charAt(0).toUpperCase()
+              : "?";
 
-          return (
+            return (
+              <View key={exp._id} style={styles.card}>
 
-            <View key={exp._id} style={styles.card}>
+                {/* LEFT */}
+                <View style={styles.left}>
+                  <View style={styles.avatar}>
+                    {imageUri ? (
+                      <Image
+                        source={{ uri: imageUri }}
+                        style={styles.avatarImage}
+                      />
+                    ) : (
+                      <Text style={styles.avatarText}>
+                        {firstLetter}
+                      </Text>
+                    )}
+                  </View>
 
-              {/* LEFT */}
-              <View style={styles.left}>
-                <View style={styles.avatar}>
-  {imageUri ? (
-    <Image
-      source={{ uri: imageUri }}
-      style={styles.avatarImage}
-    />
-  ) : (
-    <Text style={styles.avatarText}>
-      {firstLetter}
-    </Text>
-  )}
-</View>
-
-                <View style={{ marginLeft: 12 }}>
-                  <Text style={styles.name}>{exp.name}</Text>
-                  <Text style={styles.email}>{exp.email}</Text>
-                  <Text style={styles.role}>Nutrition Expert</Text>
-
-                  <View style={[
-                    styles.status,
-                    { backgroundColor: isAvailable ? "#14532d" : "#7f1d1d" }
-                  ]}>
-                    <Text style={{
-                      color: isAvailable ? "#22c55e" : "#ef4444",
-                      fontSize: 11
-                    }}>
-                      {isAvailable ? "Available" : "Not Available"}
+                  {/* 🔥 التعديل هنا: أضفنا flex: 1 ومرونة كاملة للحاوية لتحديد مساحة النصوص */}
+                  <View style={{ marginLeft: 12, flex: 1, justifyContent: "center" }}>
+                    <Text style={styles.name} numberOfLines={1}>{exp.name}</Text>
+                    
+                    {/* 🔥 الحل السحري: البريد الإلكتروني سيُقَص تلقائياً ويتحول إلى شكل مختصر dots... */}
+                    <Text 
+                      style={styles.email} 
+                      numberOfLines={1} 
+                      ellipsizeMode="tail"
+                    >
+                      {exp.email}
                     </Text>
+                    
+                    <Text style={styles.role}>Nutrition Expert</Text>
+
+                    <View style={[
+                      styles.status,
+                      { backgroundColor: isAvailable ? "#14532d" : "#7f1d1d" }
+                    ]}>
+                      <Text style={{
+                        color: isAvailable ? "#22c55e" : "#ef4444",
+                        fontSize: 11
+                      }}>
+                        {isAvailable ? "Available" : "Not Available"}
+                      </Text>
+                    </View>
                   </View>
                 </View>
+
+                {/* RIGHT */}
+                <View style={styles.right}>
+                  <TouchableOpacity
+                    style={[styles.iconBtn, { opacity: exp.phone ? 1 : 0.4 }]}
+                    onPress={() => openWhatsApp(exp.phone)}
+                    disabled={!exp.phone}
+                  >
+                    <Phone size={16} color="white" />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.iconBtn}
+                    onPress={() => openEmail(exp.email)}
+                  >
+                    <Mail size={16} color="white" />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.mainBtn,
+                      {
+                        opacity: isAvailable && !isSelected ? 1 : 0.4,
+                        backgroundColor: isSelected ? "#22c55e" : "#f97316"
+                      }
+                    ]}
+                    disabled={!isAvailable || isSelected}
+                    onPress={() => chooseExpert(exp._id)}
+                  >
+                    <ArrowUpRight size={18} color="white" />
+                  </TouchableOpacity>
+                </View>
+
               </View>
-
-              {/* RIGHT */}
-              <View style={styles.right}>
-
-               <TouchableOpacity
-  style={[styles.iconBtn, { opacity: exp.phone ? 1 : 0.4 }]}
-  onPress={() => openWhatsApp(exp.phone)}
-  disabled={!exp.phone}
->
-  <Phone size={16} color="white" />
-</TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.iconBtn}
-                  onPress={() => openEmail(exp.email)}
-                >
-                  <Mail size={16} color="white" />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-  style={[
-    styles.mainBtn,
-    {
-      opacity: isAvailable && !isSelected ? 1 : 0.4,
-      backgroundColor: isSelected ? "#22c55e" : "#f97316"
-    }
-  ]}
-  disabled={!isAvailable || isSelected}
-  onPress={() => chooseExpert(exp._id)}
->
-  <ArrowUpRight size={18} color="white" />
-</TouchableOpacity>
-
-              </View>
-
-            </View>
-          );
-        })}
-    </View>
+            );
+          })}
+        </View>
       </ScrollView>
 
-      {/* 🔥 BOTTOM BUTTON */}
+      {/* BOTTOM BUTTON */}
       <View style={styles.bottomContainer}>
         <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
           <Text style={styles.closeText}>Close</Text>
@@ -181,7 +188,6 @@ const firstLetter = exp.name
 }
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     backgroundColor: "#020617",
@@ -215,15 +221,33 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
 
+  /* 🔥 التعديل هنا: جعلنا حاوية اليسار مرنة لتتقاسم المساحة مع حاوية الأزرار اليمين ولا تدفعها للخارج */
   left: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    flex: 1,
+    marginRight: 10 
   },
 
   avatar: {
-    width: 55,
-    height: 55,
-    borderRadius: 50
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#22c55e",   
+    justifyContent: "center",     
+    alignItems: "center"          
+  },
+
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 30
+  },
+
+  avatarText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold"
   },
 
   name: {
@@ -269,7 +293,6 @@ const styles = StyleSheet.create({
     marginTop: 2
   },
 
-  /* 🔥 NEW */
   bottomContainer: {
     position: "absolute",
     bottom: 30,
@@ -290,29 +313,5 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 16
-  },
-  avatarImage: {
-  width: "100%",
-  height: "100%",
-  borderRadius: 50
-},
-
-avatarText: {
-  color: "white",
-  fontSize: 18,
-  fontWeight: "bold"
-},
-avatar: {
-  width: 60,
-  height: 60,
-  borderRadius: 70,
-
-  backgroundColor: "#22c55e",   // 🔥 هذا المهم
-  justifyContent: "center",     // 🔥 توسيط عمودي
-  alignItems: "center"          // 🔥 توسيط أفقي
-},
-
+  }
 });
-
-
-

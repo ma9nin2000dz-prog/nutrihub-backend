@@ -926,12 +926,7 @@ My Expert
 
   const exp = profile.expert;
 
-  /*const imageUri =
-    exp.photo && typeof exp.photo === "string"
-      ? (exp.photo.startsWith("http")
-          ? exp.photo
-        : getImageUrl(exp.photo))
-      : `https://ui-avatars.com/api/?name=${exp.name}`;*/
+  
 
 const isDefault = exp.photo === "/uploads/default-avatar.png";
 
@@ -950,8 +945,8 @@ const firstLetter = exp.name
   return (
 
     <View style={styles.expertCard}>
-      {/* LEFT */}
-      <View style={{flexDirection:"row", alignItems:"center"}}>
+     {/* LEFT */}
+<View style={{flexDirection:"row", alignItems:"center", flex: 1, marginRight: 10}}>
         <View style={styles.expertAvatar}>
   {imageUri ? (
     <Image
@@ -965,12 +960,16 @@ const firstLetter = exp.name
   )}
 </View>
 
-        <View style={{marginLeft:12}}>
+        <View style={{marginLeft:12, flex: 1}}>
           <Text style={styles.expertName}>{exp.name}</Text>
 
-          <Text style={styles.expertEmail}>
-            {exp.email}
-          </Text>
+         <Text 
+  style={styles.expertEmail}
+  numberOfLines={1}
+  ellipsizeMode="tail"
+>
+  {exp.email}
+</Text>
 
           <Text style={styles.expertRole}>
             Nutrition Expert

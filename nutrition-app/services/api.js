@@ -20,12 +20,12 @@ const getBaseUrl = () => {
    return "https://nutrihub-backend.onrender.com/api/";
     }
 
-   //return "http://192.168.8.104:5000/api/";
+   //return "http://192.168.8.102:5000/api/";
    return "https://nutrihub-backend.onrender.com/api/";
    
   } catch (err) {
     console.log("BASE URL ERROR:", err);
-//return "http://192.168.8.104:5000/api/";
+//return "http://192.168.8.102:5000/api/";
 return "https://nutrihub-backend.onrender.com/api/";
   
   }

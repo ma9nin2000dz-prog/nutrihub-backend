@@ -241,7 +241,7 @@ loadTDEE();
 
 },[]);
 /////////////////////for real steps//////////////////////////////
-useEffect(() => {
+/*useEffect(() => {
   let subscription;
 
   const start = async () => {
@@ -285,8 +285,92 @@ useEffect(() => {
   return () => {
     if (interval) clearInterval(interval);
   };
-}, [realSteps]);//[realSteps, displaySteps]
+}, [realSteps]);*/
 /////////////////////////
+
+
+
+
+
+useEffect(() => {
+  let subscription;
+
+  const startPedometer = async () => {
+    const available = await Pedometer.isAvailableAsync();
+
+    if (!available) {
+      console.log("Pedometer not available");
+      return;
+    }
+
+    // 1. تحديد بداية ونهاية اليوم (من منتصف الليل حتى اللحظة)
+    const end = new Date();
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+
+    let pastDailySteps = 0;
+
+    // 2. محاولة جلب خطوات اليوم السابقة من النظام
+    try {
+      const pastData = await Pedometer.getStepCountAsync(start, end);
+      pastDailySteps = pastData.steps || 0;
+      
+      // تحديث العداد مبدئياً بالخطوات السابقة
+      setRealSteps(pastDailySteps);
+    } catch (error) {
+      console.log("Could not get past steps: ", error);
+    }
+
+    // 3. مراقبة الخطوات الجديدة وإضافتها للخطوات السابقة
+    subscription = Pedometer.watchStepCount(result => {
+      setRealSteps(pastDailySteps + result.steps);
+    });
+  };
+
+  startPedometer();
+
+  return () => {
+    if (subscription) subscription.remove();
+  };
+}, []);
+
+
+
+
+
+///////////////////
+// 🔥 INITIALIZE DISPLAY STEPS
+useEffect(() => {
+  let interval;
+
+  if (displaySteps < realSteps) {
+    interval = setInterval(() => {
+      setDisplaySteps(prev => {
+        if (prev + 1 >= realSteps) {
+          clearInterval(interval);
+          return realSteps; // stop هنا
+        }
+        //return prev + 1;
+        return prev + Math.ceil((realSteps - prev) / 8);
+      });
+    }, 10); // سرعة animation
+  }
+
+  return () => {
+    if (interval) clearInterval(interval);
+  };
+}, [realSteps]);
+
+
+
+
+
+
+
+
+
+
+
 // 🔥 SMOOTH  ANIMATION
 useEffect(() => {
   Animated.timing(translateY, {

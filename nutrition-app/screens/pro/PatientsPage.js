@@ -160,7 +160,7 @@ setActiveTab,
   fetchRecipes,
 }) {
  // default
-
+const [showPatientMenu, setShowPatientMenu] = useState(false);
 
 const { width } = useWindowDimensions();
 const isMobile = width < 768;
@@ -1005,8 +1005,10 @@ onPress={() => openEmail(p.email)}
   {/* LEFT → CHART */}
   <View style={styles.chartBox}>
 
+
   <Text style={styles.boxTitle}>Weight</Text>
    
+ 
   {(() => {
 
     const data = p.weightHistory?.slice(-6).map(w => w.weight) || [];
@@ -1090,6 +1092,11 @@ const height = 120;
   >
     <Text style={styles.addBtnText}>＋</Text>
   </TouchableOpacity>
+
+
+
+
+
 </View>
 
    {lastDates.map(date => (
@@ -1105,6 +1112,9 @@ const height = 120;
 
   {/* MEALS */}
   
+
+
+
 
 </View>
 
@@ -1183,10 +1193,84 @@ return(
 
 <ScrollView>
 
-{/* TITLE */}
+{/* TITLE
 <Text style={styles.modalTitle}>
 Meals of {selectedPatient.name}
-</Text>
+</Text> */}
+<View style={{
+  flexDirection:"row",
+  justifyContent:"space-between",
+  alignItems:"center",
+  marginBottom:15
+}}>
+
+  <Text style={styles.modalTitle}>
+    Meals of {selectedPatient.name}
+  </Text>
+
+  <View style={{position:"relative"}}>
+
+    {/* ... BUTTON */}
+    <TouchableOpacity
+      onPress={() => setShowPatientMenu(!showPatientMenu)}
+      style={{
+        paddingHorizontal:10,
+        paddingVertical:4
+      }}
+    >
+      <Text style={{
+        color:"white",
+        fontSize:25,
+        fontWeight:"bold"
+      }}>
+       ⋮
+      </Text>
+    </TouchableOpacity>
+
+    {/* DROPDOWN MENU */}
+    {showPatientMenu && (
+      <View style={{
+        position:"absolute",
+       top:0,
+right:45,
+        backgroundColor:"#111827",
+        borderRadius:12,
+        padding:10,
+        minWidth:160,
+        borderWidth:1,
+        borderColor:"#374151",
+        zIndex:999
+      }}>
+
+        <TouchableOpacity
+          onPress={() => {
+            setShowPatientMenu(false);
+            setShowModal(false);
+            deletePatient(selectedPatient._id);
+          }}
+          style={{
+            backgroundColor:"#dc2626",
+            padding:12,
+            borderRadius:10
+          }}
+        >
+          <Text style={{
+            color:"white",
+            fontWeight:"bold",
+            textAlign:"center"
+          }}>
+            Remove Patient
+          </Text>
+        </TouchableOpacity>
+
+      </View>
+    )}
+
+  </View>
+
+</View>
+
+
 
 <TouchableOpacity
   style={{
@@ -1415,6 +1499,8 @@ Meals of {selectedPatient.name}
   <Text style={{color:"white"}}>Close</Text>
 </TouchableOpacity>
 
+
+
 </ScrollView>
 
 );
@@ -1619,6 +1705,27 @@ deleteBtn:{
   alignItems:"center"
 },
 
+deleteBtnout:{
+  /*flex:1,
+  backgroundColor:"#ef4444",
+  padding:10,
+  borderRadius:12,
+  alignItems:"center",*/
+
+    width:80,
+  height:35,
+  borderRadius:8,
+paddingLeft:0,
+  justifyContent:"center",
+  alignItems:"center",
+
+  backgroundColor:"#ef4444",
+
+  shadowColor:"#000",
+  shadowOpacity:0.3,
+  shadowRadius:4,
+  elevation:4
+},
 modifyBtn:{
   marginTop:12,
   backgroundColor:"#3b82f6",

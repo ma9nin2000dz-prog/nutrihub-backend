@@ -19,6 +19,17 @@ const { user, refreshUser } = useContext(AuthContext);
 //const planName = user?.planName || "Pro";
 const planName = user?.plan;
 
+
+
+const getCCP = () => {
+  return plans[0]?.ccp || "";
+};
+
+const getRIP = () => {
+  return plans[0]?.rip || "";
+};
+
+
 const [plans, setPlans] = useState([]);
 
 const [sending, setSending] = useState(false);
@@ -60,7 +71,7 @@ useEffect(() => {
     user.plan === "Free" || user.planName === "Free";
 
   // 🔥 logic النهائي
-  if (isFreePlan) {
+  /*if (isFreePlan) {
     setShow(false);
 
   } else if (paymentRequired) {
@@ -73,7 +84,17 @@ useEffect(() => {
     setShow(false);
   }
 
+}, [user]);*/
+if (isFreePlan) {
+    setShow(false);
+
+  } else if (isExpired || paymentRequired) {
+    setShow("payment");
+  } else {
+    setShow(false);
+  }
 }, [user]);
+
 /////////////////////////////////////////////////////////////
 
 useEffect(() => {
@@ -248,12 +269,12 @@ if (show === "waiting") {
         {/* 🔥 INFO */}
         <View style={styles.box}>
           <Text style={styles.info}>
-            CCP: <Text style={styles.bold}>123456789</Text>
-          </Text>
+  CCP: <Text style={styles.bold}>{getCCP()}</Text>
+</Text>
 
-          <Text style={styles.info}>
-            RIP: <Text style={styles.bold}>007999999999</Text>
-          </Text>
+<Text style={styles.info}>
+  RIP: <Text style={styles.bold}>{getRIP()}</Text>
+</Text>
         </View>
 
         {/* 🔥 UPLOAD */}

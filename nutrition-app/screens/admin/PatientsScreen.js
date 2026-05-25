@@ -725,7 +725,7 @@ await fetchPatients(); // 🔥 هذا هو الحل
         </TouchableOpacity>
       )}
 
-      {/* REJECT PAYMENT */}
+      {/* REJECT PAYMENT 
       <TouchableOpacity
         style={styles.rejectBtn}
         onPress={() => {
@@ -734,7 +734,63 @@ await fetchPatients(); // 🔥 هذا هو الحل
         }}
       >
         <Text style={styles.btnText}>Reject Payment</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>*/}
+
+
+
+<TouchableOpacity
+  style={[
+    styles.rejectBtn,
+    {
+      backgroundColor: selectedPatient?.paymentRequired
+        ? "#22C55E" // أخضر = قبول الدفع
+        : "#F59E0B" // برتقالي = رفض الدفع
+    }
+  ]}
+  onPress={async () => {
+
+    // إذا كان الدفع مرفوض حاليا
+    if (selectedPatient?.paymentRequired) {
+
+      // ✅ قبول الدفع
+      await apiRequest(
+        `users/payment-accept/${selectedPatient._id}`,
+        "PUT"
+      );
+
+      setSelectedPatient(prev => ({
+        ...prev,
+        paymentRequired: false
+      }));
+
+    } else {
+
+      // ❌ رفض الدفع
+      await rejectPayment(selectedPatient._id);
+
+      setSelectedPatient(prev => ({
+        ...prev,
+        paymentRequired: true
+      }));
+
+    }
+
+    fetchPatients();
+  }}
+>
+  <Text style={styles.btnText}>
+    {selectedPatient?.paymentRequired
+      ? "Accept Payment"
+      : "Reject Payment"}
+  </Text>
+</TouchableOpacity>
+
+
+
+
+
+
+
 
       {/* UPDATE PLAN */}
       <View style={{ flexDirection: "row", flexWrap: "wrap", marginTop: 15 }}>

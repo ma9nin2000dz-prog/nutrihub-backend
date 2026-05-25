@@ -26,7 +26,7 @@ const [errorMessage, setErrorMessage] = useState("");
       const res = await loginUser(email.trim(), password.trim());
 
 // 🔥 هنا تضيف الشرط
-if (res?.type === "expired_plan") {
+/*if (res?.type === "expired_plan") {
   navigation.navigate("VerifyCode", {
     email: res.email,
     from: "expired_plan",
@@ -41,7 +41,7 @@ if (res?.type === "payment_required") {
     plan: res.plan
   });
   return;
-}
+}*/
 //////////////////////////////////////////////////////
     } catch (error) {
       

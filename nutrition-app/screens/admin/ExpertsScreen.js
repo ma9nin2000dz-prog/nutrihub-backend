@@ -205,7 +205,24 @@ const rejectPayment = async (id) => {
     Alert.alert("Error", error.message);
   }
 };
+/////////////////
 
+
+const acceptPayment = async (id) => {
+  try {
+    await apiRequest(`users/payment-accept/${id}`, "PUT");
+
+    Alert.alert("Done", "Payment accepted ✔");
+
+    setSelectedExpert(prev => ({
+      ...prev,
+      paymentRequired: false
+    }));
+
+  } catch (error) {
+    Alert.alert("Error", error.message);
+  }
+};
 
 
 
@@ -691,13 +708,41 @@ const rejectPayment = async (id) => {
           <Text style={styles.btnText}>Approve</Text>
         </TouchableOpacity>
       )}
-
+{/*
       <TouchableOpacity
         style={styles.rejectBtn}
         onPress={() => rejectPayment(selectedExpert._id)}
       >
         <Text style={styles.btnText}>Reject Payment</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>*/}
+
+
+
+
+
+      <TouchableOpacity
+  style={[
+    styles.rejectBtn,
+    {
+      backgroundColor: selectedExpert?.paymentRequired
+        ? "#22C55E"
+        : "#F59E0B"
+    }
+  ]}
+  onPress={() => {
+    if (selectedExpert?.paymentRequired) {
+      acceptPayment(selectedExpert._id);
+    } else {
+      rejectPayment(selectedExpert._id);
+    }
+  }}
+>
+  <Text style={styles.btnText}>
+    {selectedExpert?.paymentRequired
+      ? "Accept Payment"
+      : "Reject Payment"}
+  </Text>
+</TouchableOpacity>
 
       <TouchableOpacity
         style={styles.deleteBtnModern}
