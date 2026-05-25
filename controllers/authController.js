@@ -327,18 +327,8 @@ console.log("NOW:", new Date());
 }
 
 
-// 🔥 تحقق من انتهاء الاشتراك
-// 🔥 تحقق من انتهاء الاشتراك
-/*if (user.planEndDate && user.planEndDate < Date.now()) {
-  user.status = "pending";
-  await user.save();
 
-  return res.status(200).json({
-    type: "expired_plan",
-    email: user.email,
-  });
-}*/
-if (
+/*if (
   (user.planEndDate && new Date(user.planEndDate) < new Date()) ||
   user.paymentRequired === true
 ) {
@@ -346,7 +336,7 @@ if (
     type: "payment_required",
     email: user.email,
   });
-}
+}*/
 
 
 

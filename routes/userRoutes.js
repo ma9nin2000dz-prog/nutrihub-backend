@@ -92,6 +92,36 @@ router.put("/payment-reject/:id", protect, adminOnly, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+/////////////////////////////////////////////////
+
+
+
+// ✅ ACCEPT PAYMENT
+router.put("/payment-accept/:id", protect, adminOnly, async (req, res) => {
+  try {
+
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    user.paymentRequired = false;
+
+    await user.save();
+
+    res.json({
+      message: "Payment accepted ✔"
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      error: err.message
+    });
+  }
+});
 
 /////////////////////////////////////////////////////
 // 👤 GET CURRENT LOGGED USER
